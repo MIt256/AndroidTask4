@@ -30,13 +30,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         binding = ActivityMapsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        mainViewModel.getAtmList().observe(this, {
-            it?.let {
-                if (::mMap.isInitialized)
-                updateMap(it as AtmList)
-            }
-        })
-
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
@@ -44,8 +37,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+        //is it possible to do this or not?
+        mainViewModel.getAtmList().observe(this, {
+            it?.let {
+                if (::mMap.isInitialized)
+                    updateMap(it as AtmList)
+            }
+        })
 
-        mainViewModel.getData()
         val adelaideBounds = LatLngBounds(
             LatLng(52.337240, 30.834963),  // SW bounds
             LatLng(52.557113, 31.101576) // NE bounds
