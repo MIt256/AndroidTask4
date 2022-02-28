@@ -29,11 +29,14 @@ class MainViewModel: ViewModel() {
             .create(QuestApi::class.java)
 
         CoroutineScope(Dispatchers.IO).launch() {
+            try{
             val response = api.getQuestList().awaitResponse()
             if (response.isSuccessful) {
                 withContext(Dispatchers.Main) { atmList.value = response.body()!! }
             }
+            } catch (ex:Exception){}
         }
+
     }
 
     companion object{
